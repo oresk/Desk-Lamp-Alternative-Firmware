@@ -90,8 +90,16 @@ void handleColorGET() {
       server.arg("ratio") + ", brightness:" +
       server.arg("brightness") + ")");
     state = CONSTANTCOLOR;
-    g_ratio = server.arg("ratio").toFloat();
-    g_brightness = server.arg("brightness").toFloat();
+    
+    float ratio = server.arg("ratio").toFloat();
+    if (ratio > 0.6) ratio = 0.6;
+    if (ratio < 0) ratio = 0;
+    g_ratio = ratio;
+    
+    float brightness = server.arg("brightness").toFloat();
+    if (brightness > 0.6) brightness = 0.6;
+    if (brightness < 0) brightness = 0;
+    g_brightness = brightness;
   }
 
   root["ratio"] = g_ratio;
@@ -122,11 +130,12 @@ void handleSplitGET() {
       server.arg("cold") + ")");
     state = CONSTANTCOLOR;
     float cold = server.arg("cold").toFloat();
-    float warm = server.arg("warm").toFloat();
     if (cold > 0.6) cold = 0.6;
     if (cold < 0) cold = 0;
+    float warm = server.arg("warm").toFloat();
     if (warm > 0.6) warm = 0.6;
     if (warm < 0) warm = 0;
+    
     g_ratio = warm / (cold + warm);
     g_brightness = warm + cold;
   }
